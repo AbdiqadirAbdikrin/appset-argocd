@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+
+metadata:
+  name: appset-app
+  namespace: argocd
+
+spec:
+  generators:
+    - list:
+        elements:
+          - env: dev
+          - env: staging
+          - env: prod
+
+  template:
+    metadata:
+      name: "{{env}}-app"
+
+    spec:
+      project: default
+
+      source:
+        repoURL: https://github.com/AbdiqadirAbdikrin/appset-argocd
+        targetRevision: main
+        path: appset-app
+
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: "{{env}}"
+
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+
+        syncOptions:
+          - CreateNamespace=true
+
+    
