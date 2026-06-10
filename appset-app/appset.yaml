@@ -15,7 +15,7 @@ spec:
 
   template:
     metadata:
-      name: "{{env}}-app"
+      name: appset-app-{{env}}
 
     spec:
       project: default
